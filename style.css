@@ -1,0 +1,125 @@
+/*@Copyright Yeison - VFS 2025-2026*/
+
+body {
+    background: #341f97; /* page background */
+    font-family: 'Lucida Sans'; /* base font */
+    color: white; /* base text color */
+}
+
+/* Footer styling */
+.footer-container {
+    text-align: center;
+    background: #5f27cd;
+    padding: 10px;
+    border-radius: 10px;
+    border: 5px outset #a087d1; /* bevel effect */
+}
+
+/* Header / masthead styling (also reused for tabs bar) */
+.header-container {
+    display: flex; /* place logo and title on a row */
+    align-items: center; /* vertical centering */
+    background: #5f27cd;
+    padding: 5px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    border: 5px outset #a087d1; /* highlight edge */
+}
+
+    .header-container img {
+        height: 48px; /* lock logo height */
+        width: auto;
+        display: block; /* remove inline gap */
+    }
+
+/* Main wrapper: stack children vertically */
+.main-container {
+    display: flex;
+    flex-direction: column; /* header (tabs) above content row */
+}
+
+/* Top nav list*/
+.nav-list {
+    text-align: left;
+    list-style: none; /* remove bullets */
+    padding: 0;
+    margin: 0;
+}
+
+    .nav-list li {
+        display: inline; /* horizontal list */
+        margin-right: 20px;
+        font-size: 20px;
+    }
+
+/* Game panel outer frame */
+.board-container {
+    width: fit-content; /* shrink to content width */
+    padding: 16px;
+    background: #794ece;
+    border-radius: 10px;
+    border: 5px outset #a087d1;
+}
+
+/* Inner frame that will contain HUD + (future) grid */
+.board-shell {
+    padding: 12px;
+    padding-bottom: 250px; /* vertical space placeholder for the board */
+    background: #baacd5;
+    border-radius: 10px;
+    border: 5px inset #837897; /* inner bevel */
+}
+
+/* HUD (flags / reset / time) */
+.hud {
+    display: flex;
+    gap: 12px; /* spacing between items */
+    justify-content: center; /* center items horizontally */
+    margin-bottom: 12px; /* gap to the board area */
+    padding: 8px;
+    background: #794ece;
+    border-radius: 10px;
+    border: 5px outset #a087d1;
+}
+
+    .hud img {
+        width: 25px; /* emoji/reset size */
+    }
+
+.hud-item {
+    min-width: 80px; /* consistent box width */
+    text-align: center;
+    padding: 6px 10px;
+    background: #1b114c; /* dark capsule look */
+    border-radius: 10px;
+    border: 5px outset #baacd5;
+    font-size: 25px; /* 3-digit counter size */
+}
+
+/* Two-column layout */
+.content-row {
+    display: grid;
+    grid-template-columns: 1fr 300px; /* flexible left, fixed right */
+    gap: 24px;
+    align-items: start;
+    margin: 24px auto; /* center the whole row block */
+}
+
+/* Best Times header block (inside the aside) */
+.best-times {
+    text-align: center;
+    margin-bottom: 260px; /* visual spacing placeholder */
+    /* NOTE: this large margin is temporary until there is content */
+    padding: 12px;
+    background: #5f27cd;
+    border-radius: 10px;
+    border: 5px outset #a087d1;
+}
+
+/* Aside container styling */
+.time-container {
+    padding: 16px;
+    background: #794ece;
+    border-radius: 10px;
+    border: 5px outset #a087d1;
+}
