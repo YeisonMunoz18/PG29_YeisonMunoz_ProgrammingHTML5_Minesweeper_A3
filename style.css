@@ -53,12 +53,17 @@ body {
     }
 
 /* Game panel outer frame */
-.board-container {
-    width: fit-content; /* shrink to content width */
-    padding: 16px;
+#board-container {
+    /*width: fit-content;*/ /* shrink to content width */
+    /*padding: 16px;
     background: #794ece;
     border-radius: 10px;
-    border: 5px outset #a087d1;
+    border: 5px outset #a087d1;*/
+
+    display: grid;
+    grid-template-columns: repeat(10, 100px);
+    grid-gap: 5px;
+    justify-content: center;
 }
 
 /* Inner frame that will contain HUD + (future) grid */
@@ -122,4 +127,16 @@ body {
     background: #794ece;
     border-radius: 10px;
     border: 5px outset #a087d1;
+}
+
+.cell {
+    width: 100px;
+    height: 100px;
+    background: #fff;
+    border: 2px solid #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    cursor: pointer;
 }

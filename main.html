@@ -10,7 +10,7 @@
 <body class="game">
     <!-- Site masthead: logo + title -->
     <header class="header-container">
-        <img src="logo.png" alt="Logo" />
+        <img src="images/logo.png" alt="Logo" />
         <h1>Minesweeper</h1>
     </header>
 
@@ -29,17 +29,17 @@
         <!-- Two-column row: left = game panel, right = Best Times -->
         <section class="content-row">
             <!-- Outer frame for the game area -->
-            <section class="board-container">
+            <div id="board-container">
                 <!-- Inner frame that will hold HUD + (future) board grid -->
                 <section class="board-shell">
                     <!-- HUD -->
                     <section class="hud">
                         <div class="hud-item">000</div>
-                        <button id="reset" class="hud-item"><img src="emoji.png" alt="Reset Button" /></button>
+                        <button id="reset" class="hud-item"><img src="images/emoji.png" alt="Reset Button" /></button>
                         <div class="hud-item">000</div>
                     </section>
                 </section>
-            </section>
+            </div>
             <!-- Right column: Best Times panel -->
             <aside class="time-container">
                 <header class="best-times">
