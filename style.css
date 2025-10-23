@@ -152,3 +152,19 @@ body {
     background-color: #eceff1;
     cursor: default;
 }
+
+.difficultyBtn {
+    padding: 10px;
+    margin: 5px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: 20px;
+    border: 2px outset #333;
+    background: #a087d1;
+    cursor: pointer;
+    color: white;
+}
+
+#reset {
+    cursor: pointer;
+}

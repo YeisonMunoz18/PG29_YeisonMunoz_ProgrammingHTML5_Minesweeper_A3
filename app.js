@@ -36,27 +36,10 @@ class Minesweeper {
 
         for (let i = 0; i < this.totalCells; i++) {
             if (!this.board[i].hasBomb) {
+                const neighbors = this.getNeighborIndices(i);
                 let countAround = 0;
-                const neighbors = [
-                    -this.size - 1,
-                    -this.size,
-                    -this.size + 1,
-                    - 1,
-                    + 1,
-                    +this.size - 1,
-                    +this.size,
-                    +this.size + 1
-                ];
-
-                for (let n = 0; n < neighbors.length; n++) {
-                    const neighborIndex = i + neighbors[n];
-
-                    if (neighborIndex < 0 || neighborIndex >= this.totalCells) continue;
-
-                    if (this.board[neighborIndex].hasBomb) countAround++;
-                }
+                for (const ni of neighbors) if (this.board[ni].hasBomb) countAround++;
                 this.board[i].bombsAround = countAround;
-                console.log(i + "has this bombs around: " + this.board[i].bombsAround);
             } 
         }
 
@@ -103,6 +86,21 @@ class Minesweeper {
         });
     };
 
+    getNeighborIndices = (i) => {
+        const res = [];
+        const r = Math.floor(i / this.size);
+        const c = i % this.size;
+        for (let dr = -1; dr <= 1; dr++) {
+            for (let dc = -1; dc <= 1; dc++) {
+                if (dr === 0 && dc === 0) continue;
+                const nr = r + dr, nc = c + dc;
+                if (nr < 0 || nr >= this.size || nc < 0 || nc >= this.size) continue;
+                res.push(nr * this.size + nc);
+            }
+        }
+        return res;
+    }
+
     handleLeftClick = (index) => {
 
         if (this.isGameOver) return;
@@ -133,27 +131,14 @@ class Minesweeper {
     };
 
     revealEmptyNeighbors = (index) => {
-        const neighbors = [
-            -this.size - 1,
-            -this.size,
-            -this.size + 1,
-            - 1,
-            + 1,
-            +this.size - 1,
-            +this.size,
-            +this.size + 1
-        ];
+        const neighbors = this.getNeighborIndices(index);
 
-        for (let n = 0; n < neighbors.length; n++) {
-            const neighborIndex = index + neighbors[n];
-            if (neighborIndex < 0 || neighborIndex >= this.totalCells) continue;
-
-            const currentRow = Math.floor(index / this.size);
-            const neighborRow = Math.floor(neighborIndex / this.size);
-            if (Math.abs(neighborRow - currentRow) > 1) continue;
-
+        for (const neighborIndex of neighbors) {
             const neighbor = this.board[neighborIndex];
             const cell = this.boardEl.children[neighborIndex];
+
+            // no revelar si está marcada
+            if (neighbor.isFlagged) continue;
 
             if (!neighbor.isRevealed && !neighbor.hasBomb) {
                 neighbor.isRevealed = true;
@@ -161,8 +146,10 @@ class Minesweeper {
 
                 if (neighbor.bombsAround > 0) {
                     this.paintNumber(cell, neighbor.bombsAround);
+                    this.checkWin();
                 } else {
                     this.revealEmptyNeighbors(neighborIndex);
+                    this.checkWin();
                 }
             }
         }
@@ -240,11 +227,14 @@ class Minesweeper {
     };
 
     resetGame = () => {
+        this.stopTimer();
         this.secondsElapsed = 0;
+        if (this.timerEl) this.timerEl.textContent = '000';
         this.updateTimerDisplay();
 
         this.isGameOver = false;
         this.flagsCounter = 0;
+        this.flagCountEl.textContent = this.flagsCounter;
 
         this.board = Array(this.totalCells).fill('').map(() => ({
             hasBomb: false,
@@ -265,17 +255,8 @@ class Minesweeper {
         for (let i = 0; i < this.totalCells; i++) {
             if (!this.board[i].hasBomb) {
                 let countAround = 0;
-                const neighbors = [
-                    -this.size - 1, -this.size, -this.size + 1,
-                    -1, +1,
-                    +this.size - 1, +this.size, +this.size + 1
-                ];
-                for (const offset of neighbors) {
-                    const neighborIndex = i + offset;
-                    if (neighborIndex >= 0 && neighborIndex < this.totalCells) {
-                        if (this.board[neighborIndex].hasBomb) countAround++;
-                    }
-                }
+                const neighbors = this.getNeighborIndices(i);
+                for (const ni of neighbors) if (this.board[ni].hasBomb) countAround++;
                 this.board[i].bombsAround = countAround;
             }
         }
