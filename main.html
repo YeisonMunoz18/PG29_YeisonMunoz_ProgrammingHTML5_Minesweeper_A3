@@ -19,11 +19,11 @@
         <!-- Top navigation -->
         <header class="header-container">
             <nav class="nav-list">
-                <ul>
-                    <li>Beginner</li>
-                    <li>Intermediate</li>
-                    <li>Expert</li>
-                </ul>
+                <div>
+                    <button id="beginner">Beginner</button>
+                    <button id="intermediate">Intermediate</button>
+                    <button id="expert">Expert</button>
+                </div>
             </nav>
         </header>
         <!-- Two-column row: left = game panel, right = Best Times -->
@@ -34,11 +34,12 @@
                 <section class="board-shell">
                     <!-- HUD -->
                     <section class="hud">
-                        <div class="hud-item">000</div>
-                        <button id="reset" class="hud-item"><img src="images/emoji.png" alt="Reset Button" /></button>
-                        <div class="hud-item">000</div>
+                        <div class="hud-item" id="flags">000</div>
+                        <button class="hud-item" id="reset" ><img src="images/emoji.png" alt="Reset Button" /></button>
+                        <div class="hud-item" id="timer">000</div>
                     </section>
                 </section>
+                <div id="board"></div>   
             </div>
             <!-- Right column: Best Times panel -->
             <aside class="time-container">

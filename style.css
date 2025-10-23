@@ -54,22 +54,28 @@ body {
 
 /* Game panel outer frame */
 #board-container {
-    /*width: fit-content;*/ /* shrink to content width */
-    /*padding: 16px;
+    width: fit-content;
+    padding: 16px;
     background: #794ece;
     border-radius: 10px;
-    border: 5px outset #a087d1;*/
+    border: 5px outset #a087d1;
+}
 
+#board {
+    width: fit-content;
+    padding: 16px;
+    background: #794ece;
+    border-radius: 10px;
+    border: 5px outset #a087d1;
     display: grid;
-    grid-template-columns: repeat(10, 100px);
-    grid-gap: 5px;
+    grid-template-columns: repeat(8, 50px);
+    grid-gap: 0px;
     justify-content: center;
 }
 
 /* Inner frame that will contain HUD + (future) grid */
 .board-shell {
-    padding: 12px;
-    padding-bottom: 250px; /* vertical space placeholder for the board */
+    padding: 12px; /* vertical space placeholder for the board */
     background: #baacd5;
     border-radius: 10px;
     border: 5px inset #837897; /* inner bevel */
@@ -130,13 +136,19 @@ body {
 }
 
 .cell {
-    width: 100px;
-    height: 100px;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    color: black;
     background: #fff;
-    border: 2px solid #333;
+    border: 2px outset #333;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 2em;
     cursor: pointer;
+}
+
+.cell.revealed {
+    background-color: #eceff1;
+    cursor: default;
 }
