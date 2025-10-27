@@ -135,6 +135,7 @@ body {
     border: 5px outset #a087d1;
 }
 
+/* defines each square on the Minesweeper grid */
 .cell {
     aspect-ratio: 1 / 1;
     width: 100%;
@@ -148,11 +149,13 @@ body {
     cursor: pointer;
 }
 
+/* Styling for revealed cells (after being clicked) */
 .cell.revealed {
     background-color: #eceff1;
     cursor: default;
 }
 
+/* Buttons for difficulty selection (Beginner, Intermediate, Expert) */
 .difficultyBtn {
     padding: 10px;
     margin: 5px;
@@ -165,6 +168,7 @@ body {
     color: white;
 }
 
+/* Reset button styling */
 #reset {
     cursor: pointer;
 }

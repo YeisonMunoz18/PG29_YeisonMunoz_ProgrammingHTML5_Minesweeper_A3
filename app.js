@@ -1,14 +1,20 @@
+
+// @Copyright Yeison - VFS 2025-2026
+
+// Minesweeper main class - controls the entire game logic and UI interaction
 class Minesweeper {
     constructor(size, bombsCount) {
-        this.size = size;
-        this.totalCells = size * size;
-        this.bombsCount = bombsCount;
-        this.isGameOver = false;
-        this.flagsCounter = 0;
+        // Basic game setup
+        this.size = size;               // Grid dimension (size * size)
+        this.totalCells = size * size;  // Total number of cells
+        this.bombsCount = bombsCount;   // Total number of bombs in the board
+        this.isGameOver = false;        // Flag indicating if the game has ended
+        this.flagsCounter = 0;          // Counter for placed flags
 
-        this.timerInterval = null;
-        this.secondsElapsed = 0;
-        this.timerEl = null;
+        // Timer system
+        this.timerInterval = null;      // Interval reference for the timer
+        this.secondsElapsed = 0;        // Counter for elapsed seconds
+        this.timerEl = null;            // HTML element for timer display
  
         this.boardEl = document.querySelector('#board');
         this.flagCountEl = document.querySelector('#flags');
@@ -17,6 +23,7 @@ class Minesweeper {
         this.buttonIntEl = document.querySelector('#intermediate');
         this.buttonExpEl = document.querySelector('#expert');
 
+        // Create an empty board structure
         this.board = Array(this.totalCells).fill('').map(() => ({
             hasBomb: false,
             isRevealed: false,
@@ -24,16 +31,17 @@ class Minesweeper {
             bombsAround: 0
         }));
 
+        // Random bomb placement
         let bombsPlaced = 0;
         while (bombsPlaced < bombsCount) {
             const randomIndex = Math.floor(Math.random() * this.totalCells)
             if (!this.board[randomIndex].hasBomb) {
                 this.board[randomIndex].hasBomb = true;
-                console.log("bomb is: " + randomIndex + " " + this.board[randomIndex].hasBomb);
                 bombsPlaced++;
             }
         }
 
+        // Calculate bombs around each cell
         for (let i = 0; i < this.totalCells; i++) {
             if (!this.board[i].hasBomb) {
                 const neighbors = this.getNeighborIndices(i);
@@ -43,8 +51,13 @@ class Minesweeper {
             } 
         }
 
+        // Initialize the board and attach events
         this.init();
+
+        // Reset button event
         this.ResetbtnEl.addEventListener('click', () => this.resetGame());
+
+        // Difficulty buttons - create new boards
         this.buttonBegEl.addEventListener('click', () => {
             this.boardEl.innerHTML = '';
             this.boardEl.style.gridTemplateColumns = 'repeat(8, 50px)';
@@ -64,20 +77,22 @@ class Minesweeper {
         });
     }
 
+    // Initialize and render the board
     init = () => {
         this.isGameOver = false;
-        
-
         this.flagCountEl.textContent = this.flagsCounter;
-
         this.boardEl.innerHTML = '';
 
+        // Create cell elements and attach mouse events
         this.board.map((_, index) => {
             const cell = document.createElement('div');
             cell.classList.add('cell');
             cell.dataset.index = index;
 
+            // Left-click (reveal)
             cell.addEventListener('click', () => this.handleLeftClick(index));
+
+            // Right-click (flag)
             cell.addEventListener('contextmenu', (e) => {
                 e.preventDefault();
                 this.handleRightClick(index);
@@ -86,6 +101,7 @@ class Minesweeper {
         });
     };
 
+    // Return valid neighbor indices around a given cell
     getNeighborIndices = (i) => {
         const res = [];
         const r = Math.floor(i / this.size);
@@ -101,10 +117,12 @@ class Minesweeper {
         return res;
     }
 
+    // Handle left click (reveal cell)
     handleLeftClick = (index) => {
 
         if (this.isGameOver) return;
 
+        // Start timer on first click
         if (this.secondsElapsed === 0 && !this.timerInterval) {
             this.startTimer();
         }
@@ -117,19 +135,24 @@ class Minesweeper {
         current.isRevealed = true;
         cell.classList.add('revealed');
 
+        // If bomb clicked, end game
         if (current.hasBomb) {
             this.gameOver();
             return;
         }
 
+        // Show number if bombs nearby
         if (current.bombsAround > 0) {
             this.paintNumber(cell, current.bombsAround);    
             return;
         }
+
+        // If no bombs nearby, reveal empty neighbors recursively
         this.revealEmptyNeighbors(index);
         this.checkWin();
     };
 
+    // Reveal all empty neighbor cells recursively
     revealEmptyNeighbors = (index) => {
         const neighbors = this.getNeighborIndices(index);
 
@@ -137,9 +160,10 @@ class Minesweeper {
             const neighbor = this.board[neighborIndex];
             const cell = this.boardEl.children[neighborIndex];
 
-            // no revelar si está marcada
+            // Skip if flagged
             if (neighbor.isFlagged) continue;
 
+            // Reveal if not already revealed or bomb
             if (!neighbor.isRevealed && !neighbor.hasBomb) {
                 neighbor.isRevealed = true;
                 cell.classList.add('revealed');
@@ -155,6 +179,7 @@ class Minesweeper {
         }
     };
 
+    // Draw number on cell with color
     paintNumber = (cell, n) => {
         cell.textContent = n;
         const colors = {
@@ -170,16 +195,17 @@ class Minesweeper {
         cell.style.color = colors[n] || '#000'
     };
 
+    // Handle right click (toggle flag)
     handleRightClick = (index) => {
 
         if (this.isGameOver) return;
-
         
         const cell = this.boardEl.children[index];
         const current = this.board[index];
 
         if (current.isRevealed) return;
 
+        // Toggle flag state
         current.isFlagged = !current.isFlagged;
         if (current.isFlagged) {
             const img = document.createElement('img');
@@ -195,22 +221,25 @@ class Minesweeper {
             this.flagsCounter--;
         }
 
+        // Update flag counter display
         this.flagCountEl.textContent = this.flagsCounter;
     };
 
+    // Check if player has won
     checkWin = () => {
         const unrevealed = this.board.filter(cell => !cell.isRevealed && !cell.hasBomb);
         if (unrevealed.length === 0) {
             this.isGameOver = true;
-            alert('Gano pedazo de fukin');
+            alert('You win!');
         }
     }
 
+    // Game over logic (reveal all bombs)
     gameOver = () => {
         this.stopTimer();
         this.isGameOver = true;
 
-        console.log("PERDIO PERRA");
+        // Reveal all bombs visually
         for (let i = 0; i < this.totalCells; i++) {
             const cell = this.boardEl.children[i];
             if (this.board[i].hasBomb) {
@@ -226,6 +255,7 @@ class Minesweeper {
         }
     };
 
+    // Reset the current game
     resetGame = () => {
         this.stopTimer();
         this.secondsElapsed = 0;
@@ -236,6 +266,7 @@ class Minesweeper {
         this.flagsCounter = 0;
         this.flagCountEl.textContent = this.flagsCounter;
 
+        // Recreate the board structure
         this.board = Array(this.totalCells).fill('').map(() => ({
             hasBomb: false,
             isRevealed: false,
@@ -243,6 +274,7 @@ class Minesweeper {
             bombsAround: 0
         }));
 
+        // Place bombs again
         let bombsPlaced = 0;
         while (bombsPlaced < this.bombsCount) {
             const randomIndex = Math.floor(Math.random() * this.totalCells);
@@ -252,6 +284,7 @@ class Minesweeper {
             }
         }
 
+        // Recalculate surrounding bombs
         for (let i = 0; i < this.totalCells; i++) {
             if (!this.board[i].hasBomb) {
                 let countAround = 0;
@@ -261,29 +294,35 @@ class Minesweeper {
             }
         }
 
+        // Reinitialize the visual board
         this.init();
     }
 
+    // Timer start
     startTimer = () => {
         this.timerEl = document.querySelector('#timer');
         this.secondsElapsed = 0;
 
         if (this.timerInterval) clearInterval(this.timerInterval);
 
+        // Increment seconds every 1 second
         this.timerInterval = setInterval(() => {
             this.secondsElapsed++;
             this.updateTimerDisplay();
         }, 1000);
     };
 
+    // Stop timer
     stopTimer = () => {
         clearInterval(this.timerInterval);
         this.timerInterval = null;
     };
 
+    // Update timer display on screen
     updateTimerDisplay = () => {
         this.timerEl.textContent = this.secondsElapsed.toString().padStart(3, '0');
     };
 }
 
+// Start default game (8x8 grid, 10 bombs)
 new Minesweeper(8, 10);
