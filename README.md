@@ -1,6 +1,7 @@
-**PG29 - Yeison Munoz - VFS HTML5 - Assignment 2 - Minesweeper**
+**PG29 - Yeison Munoz - VFS HTML5 - Assignment 3 - Minesweeper**
 ----------
-Minesweeper static UI on a single page with HTML and CSS (no JS): header, navigation, HUD, “Best Times” panel, and footer.
+Minesweeper game built with HTML, CSS, and JavaScript.  
+Includes timer, flag counter, difficulty selection (Beginner, Intermediate, Expert), and reset functionality.
 
 **Download/Install**
 ---------
@@ -8,7 +9,11 @@ Minesweeper static UI on a single page with HTML and CSS (no JS): header, naviga
 
 **How to use**
 --------
-Once the repository is cloned, open the main.html file which will direct you to minesweeper
+- Open main.html in your browser to start the game.
+- Choose a difficulty level and begin playing.
+- Left-click to reveal cells.
+- Right-click to place or remove flags.
+- The timer starts with your first move and stops when the game ends.
 
 **Author**
 --------
